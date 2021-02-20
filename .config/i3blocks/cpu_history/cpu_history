@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euf -o pipefail
+
+source "$SCRIPT_DIR/functions/history_chart"
+
+history_file='/tmp/cpu_history'
+idle=$(mpstat 1 1 | tail -n 1 | awk '{print $12}')
+percentage=$(echo "100 - $idle" | bc -l)
+
+history_graph "$history_file" "$percentage"

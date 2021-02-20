@@ -1,0 +1,68 @@
+# i3blocks config file
+#
+# Please see man i3blocks for a complete reference!
+# The man page is also hosted at http://vivien.github.io/i3blocks
+#
+# List of valid properties:
+#
+# align
+# color
+# command
+# full_text
+# instance
+# interval
+# label
+# min_width
+# name
+# separator
+# separator_block_width
+# short_text
+# signal
+# urgent
+
+# Global properties
+#
+# The top properties below are applied to every block, but can be overridden.
+# Each block command defaults to the script name to avoid boilerplate.
+# Change $SCRIPT_DIR to the location of your scripts!
+SCRIPT_DIR=/home/chris/.config/i3blocks
+command=$SCRIPT_DIR/$BLOCK_NAME/$BLOCK_NAME
+separator=false
+separator_block_width=10
+markup=none
+
+# [cpu_bar]
+# markup=pango
+# interval=5
+# label= 
+# min_width= ■■■■■
+
+[cpu_history]
+markup=pango
+interval=5
+label= 
+min_width= ■■■■■
+
+[memory_history]
+label= 
+markup=pango
+interval=10
+min_width= ■■■■■
+
+[disk]
+label= 
+interval=30
+
+[battery_ibook]
+markup=pango
+interval=30
+
+[volume]
+label= 
+interval=10
+#signal=10
+
+[time]
+command=date '+%Y-%m-%d %H:%M'
+interval=5
+min_width=XXXX-XX-XX XX:XX 

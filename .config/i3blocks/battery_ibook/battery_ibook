@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -euf -o pipefail
+
+battery_path='/sys/class/power_supply/PMU_battery_0/uevent'
+
+source "$battery_path"
+
+if [[ "$POWER_SUPPLY_STATUS" == "Charging" ]]; then
+    mode="&#xf1e6;"
+else
+    mode="&#xf0e7;"
+fi
+
+charge_percent=$(echo "scale=2; \
+                 ($POWER_SUPPLY_ENERGY_AVG/$POWER_SUPPLY_ENERGY_FULL)*100" \
+                 | bc -l)
+
+charge_percent="${charge_percent%.*}"
+
+if (( "$charge_percent" <= 10 )); then
+  color='red'
+  icon='&#xf244;'
+elif (( "$charge_percent" <= 25 )); then
+  color='black'
+  icon='&#xf243;'
+elif (( "$charge_percent" <= 50 )); then
+  color='black'
+  icon='&#xf242;'
+elif (( "$charge_percent" <= 75 )); then
+  color='black'
+  icon='&#xf241;'
+else
+  color='black'
+  icon='&#xf240;'
+fi
+
+echo "<span color='$color'><span font='FontAwesome'>$mode $icon ($charge_percent%)</span></span>"

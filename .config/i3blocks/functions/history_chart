@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+history_graph (){
+    history_file="$1"
+    num="$2"
+    history_length="${3:-}"
+
+    if [[ ! -f "$history_file" ]]; then
+        touch "$history_file"
+    fi
+
+    if [[ -z "$history_length" ]]; then
+        history_length='5'
+    fi
+
+    blocks=('▁' '▃' '▅' '▇')
+    colors=('#3A80A8' '#3A80A8' '#3A80A8' '#3A80A8')
+    percentage=$(echo "$num" | bc -l)
+    multiplier=$(echo "scale=2; $percentage/100" | bc -l)
+    num_squares=$(echo "scale=2; (${#blocks[@]}-1) * $multiplier" | bc -l)
+    rounded_num=$(printf "%.0f\n" "$num_squares")
+
+    echo "<span color='${colors[$rounded_num]}'>${blocks[$rounded_num]}</span>" >> "$history_file"
+    past_history=$(tail -n "$history_length" "$history_file")
+    echo "$past_history" > "$history_file"
+
+    readarray -t ARRAY < "$history_file"; IFS=''; echo "${ARRAY[*]}"
+}
