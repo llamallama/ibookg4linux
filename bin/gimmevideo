@@ -2,7 +2,7 @@
 
 set -euf -o pipefail
 
-ssh_host='bean'
+ssh_host="$GIMME_VIDEO_HOST"
 url="$(xclip -o -selection clipboard)"
 
 if [[ "$url" == *"tiktok"* ]]; then
