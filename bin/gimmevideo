@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -euf -o pipefail
+
+ssh_host='bean'
+url="$(xclip -o -selection clipboard)"
+
+if [[ "$url" == *"tiktok"* ]]; then
+    stream=true
+    ffmpeg_options=("-filter:v" "scale='240:trunc(ow/a/2)*2'" "-c:a" "copy" "-f" "matroska")
+elif [[ "$url" == *"youtu"* ]]; then
+    stream=false
+else
+    stream=true
+    ffmpeg_options=("-filter:v" "scale='480:trunc(ow/a/2)*2'" "-c:a" "copy" "-f" "matroska")
+fi
+
+if [[ "$stream" == true ]]; then
+    ssh "$ssh_host" -- "youtube-dl '$url' -o - | \
+                        ffmpeg -i - ${ffmpeg_options[@]} -" \
+                        | mplayer -
+else
+    youtube-dl -f 'best[height<=480]' "$url" -o - | mplayer -
+fi

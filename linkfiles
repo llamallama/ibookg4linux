@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -euf -o pipefail
+
+sourceDir=~
+
+myDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+linkArr=("bin"
+         ".config/i3blocks")
+
+for l in "${linkArr[@]}"; do
+  echo "Removing ${sourceDir}/${l}"
+
+  rm -rf "${sourceDir:?}/${l}"
+  ln -vs "${myDir}/${l}" "${sourceDir}/${l}"
+done
